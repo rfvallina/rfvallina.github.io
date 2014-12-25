@@ -1,0 +1,13 @@
+---
+layout: post
+title: "welcome"
+date: 2014-12-25 20:58:39 +0100
+comments: true
+categories:
+---
+
+Hi there! Welcome to my new site. From now on I'll be writing about technological matters on a regular basis. Subjects will be related to my personal experiences at work, IT research and of course interesting matters from the point of view of a freelancer.
+
+Enjoy!
+
+{% img center /images/blog/welcome.jpg 200 219 %}

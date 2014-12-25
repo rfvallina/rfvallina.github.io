@@ -1,0 +1,113 @@
+/* entire container, keeps perspective */
+.flip-container {
+	perspective: 1000;
+	margin-bottom: 20px;
+}
+
+/* flip the pane when hovered */
+.flipper:hover, .flipper.hover {
+	transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+	height: 250px;
+}
+
+/* flip speed goes here */
+.flipper {
+	width: 49%;
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+	background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+	/*background-color: #E6E6E6;*/
+	background-color: #b7b7b7;
+}
+
+.right {
+	float: right;
+}
+
+.projects {
+	background-color: #777;
+}
+
+.project-info {
+	text-align: center;
+	padding: 20px 10px;
+	color: #FFF !important;
+}
+
+.project-info h3{
+	color: #FFF !important;
+}
+
+.project-live {
+
+}
+
+.fishbowl {
+	background-image: url('../images/projects/fishbowl.png');
+}
+
+.salesexporter {
+	background-image: url('../images/projects/salesexporter.png');
+}
+
+.ptshopkeeper {
+	background-image: url('../images/projects/ptshopkeeper.png');
+}
+
+.marketanalyzer {
+	background-image: url('../images/projects/marketanalyzer.png');
+}
+
+.transatlantica {
+	background-image: url('../images/projects/transatlantica.png');
+}
+
+.ebaysearch {
+	background-image: url('../images/projects/ebaysearch.png');
+}
+
+.automsg {
+	background-image: url('../images/projects/automsg.png');
+}
+
+.bidderlist {
+	background-image: url('../images/projects/bidderlist.png');
+}
+
+.buyertrafficfunnel {
+	background-image: url('../images/projects/buyertrafficfunnel.png');
+}
+
+.wholesalehunter {
+	background-image: url('../images/projects/wholesalehunter.png');
+}
+
+a.button {
+	color:#FFF;
+}
