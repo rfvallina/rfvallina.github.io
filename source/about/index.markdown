@@ -2,6 +2,7 @@
 layout: page
 sharing: true
 footer: false
+mail: raul@rfvallina.com
 ---
 
 
@@ -20,7 +21,7 @@ I'm a full-stack freelance developer living in Asturies (north of Spain). I'm mo
    **BPM**: Cordys BPMS  
 
 
-Contact me at: [{{ site.mail }}](mailto:{{ site.mail }})
+Contact me at: [{{ page.mail }}](mailto:{{ page.mail }})
 
 
 
