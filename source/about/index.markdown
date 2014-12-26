@@ -2,14 +2,13 @@
 layout: page
 sharing: true
 footer: false
-mail: raulfuentevallina@gmail.com
 ---
 
 
 <img src="../images/logo_me.png" class="center" title="me"/>
 
 
-I'm a full-stack freelance developer living in Asturies (north of Spain). I'm mostly focused on custom ecommerce integrations but I can do any software development. It doesn't matter, who's John Galt?
+I'm a full-stack freelance developer living in Asturies (north of Spain). I'm mostly focused on custom ecommerce integrations but I can do any software development. Anyway... Who's John Galt?
 
 **Certifications**: Java Programmer, Cordys Fundamentals, Cordys BPMS, eBay API (by oDesk)
 
@@ -21,7 +20,7 @@ I'm a full-stack freelance developer living in Asturies (north of Spain). I'm mo
    **BPM**: Cordys BPMS  
 
 
-Contact me at: [{{page.mail}}](mailto:{{page.mail}})
+Contact me at: [{{ site.mail }}](mailto:{{ site.mail }})
 
 
 

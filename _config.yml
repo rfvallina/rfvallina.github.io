@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://rfvallina.github.io
+url: http://rfvallina.com
 title: Raúl Fuente Vallina
 subtitle: Software developer
 author: Raúl Fuente Vallina
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: raul@rfvallina.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -94,7 +94,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: rfvallina
+disqus_short_name: rfvallinacom
 disqus_show_comment_count: false
 
 # Google Analytics
