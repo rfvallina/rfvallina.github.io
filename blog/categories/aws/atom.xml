@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Raúl Fuente Vallina]]></title>
-  <link href="http://rfvallina.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Aws | Raúl Fuente Vallina]]></title>
+  <link href="http://rfvallina.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
   <updated>2015-01-05T00:43:18+01:00</updated>
   <id>http://rfvallina.com/</id>
@@ -43,42 +43,38 @@ Recently, I launched an EC2 instance from a Linux AMI (<strong>Amazon Linux AMI 
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>ssh -i <span class="s2">&quot;/path/to/private_key.pem&quot;</span> ec2-user@your-public-dns-name
-</span></code></pre></td></tr></table></div></figure>
-
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ssh -i <span class="p">&amp;</span>ldquo<span class="p">;</span>/path/to/private_key.pem<span class="p">&amp;</span>rdquo<span class="p">;</span> ec2-user@your-public-dns-name
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Update instance packages</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo yum update -y
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Install <strong>Apache 2.4</strong>, <strong>PHP 5.5</strong> and <strong>PDO</strong> support for MySQL</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo yum install php55 php55-pdo php55-mysqlnd
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Start Apache and add httpd service to automatically start after a system boot.</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo service httpd start
 </span><span class='line'>sudo chkconfig httpd on
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Connect to your Apache server. Make sure you previously have added <strong>port 80</strong> to your security group in the EC2 Console. Open a browser and type the following.</li>
@@ -94,21 +90,20 @@ Recently, I launched an EC2 instance from a Linux AMI (<strong>Amazon Linux AMI 
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo groupadd www
 </span><span class='line'>sudo usermod -a -G www ec2-user
 </span><span class='line'><span class="nb">exit</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Give www ownership and add permission to the document root (/var/www)</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -116,18 +111,16 @@ Recently, I launched an EC2 instance from a Linux AMI (<strong>Amazon Linux AMI 
 </span><span class='line'>sudo chmod <span class="m">2775</span> /var/www
 </span><span class='line'>find /var/www -type d -exec sudo chmod <span class="m">2775</span> <span class="o">{}</span> +
 </span><span class='line'>find /var/www -type f -exec sudo chmod <span class="m">0664</span> <span class="o">{}</span> +
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Test PHP with the <strong>phpinfo</strong> page</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;&lt;?php phpinfo(); ?&gt;&quot;</span> &gt; /var/www/html/phpinfo.php
-</span></code></pre></td></tr></table></div></figure>
-
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">echo</span> <span class="p">&amp;</span>ldquo<span class="p">;&amp;</span>lt<span class="p">;</span>?php phpinfo<span class="o">()</span><span class="p">;</span> ?&gt;<span class="p">&amp;</span>rdquo<span class="p">;</span> &gt; /var/www/html/phpinfo.php
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>See the page by typing the url in a browser:</p>
 
@@ -145,37 +138,22 @@ Recently, I launched an EC2 instance from a Linux AMI (<strong>Amazon Linux AMI 
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo yum install memcached
 </span><span class='line'>sudo service memcached start
-</span><span class='line'>sudo chkconfig --level <span class="m">345</span> memcached on
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'>sudo chkconfig <span class="p">&amp;</span>ndash<span class="p">;</span>level <span class="m">345</span> memcached on
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
 <li>Install <strong>memcache extension</strong></li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo yum install php55-pecl-memcache
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Welcome]]></title>
-    <link href="http://rfvallina.com/blog/2014/12/25/welcome/"/>
-    <updated>2014-12-25T20:58:39+01:00</updated>
-    <id>http://rfvallina.com/blog/2014/12/25/welcome</id>
-    <content type="html"><![CDATA[<p>Hi there! Welcome to my new site. From now on I&rsquo;ll be writing about technological matters on a regular basis. Subjects will be related to my personal experiences at work, IT research and of course interesting matters from the point of view of a freelancer.</p>
-
-<p>Enjoy!</p>
-
-<p><img class="center" src="http://rfvallina.com/images/blog/welcome.jpg" width="200" height="219"></p>
+</span></code></pre></td></tr></table></div></figure></p>
 ]]></content>
   </entry>
   
