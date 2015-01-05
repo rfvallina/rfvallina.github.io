@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Memcached | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/memcached/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-01-05T00:43:18+01:00</updated>
+  <updated>2015-01-05T01:00:34+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -77,7 +77,7 @@ Recently, I launched an EC2 instance from a Linux AMI (<strong>Amazon Linux AMI 
 </span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
-<li>Connect to your Apache server. Make sure you previously have added <strong>port 80</strong> to your security group in the EC2 Console. Open a browser and type the following.</li>
+<li>Connect to your Apache server. Make sure you have previously added <strong>port 80</strong> to your security group in the EC2 Console. Open a browser and type the following.</li>
 </ul>
 
 
