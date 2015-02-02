@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Deployment Management | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/deployment-management/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-02-01T23:51:22+01:00</updated>
+  <updated>2015-02-02T22:47:40+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -28,7 +28,7 @@
 <p>So I considered doing a little research on how to improve this process by running one or a few commands to make all happen automatically. And this is what I found.</p>
 
 <ul>
-<li><strong>AWS OpsWorks</strong>: I never used it, but as far as I know it&rsquo;s highly customizable and useful for scaling up applications. Everything you can do with a script can be done with OpsWorks. The drawback is what if you have an instance of the application running outside AWS environment. Then this is not your choice. Also, it&rsquo;s not free.</li>
+<li><strong>AWS OpsWorks</strong>: I never used it, but as far as I know it&rsquo;s highly customizable and useful for scaling up applications. Everything you can do with a script can be done with OpsWorks and there&rsquo;s no additional charge for using it. The drawback is what if you have an instance of the application running outside AWS environment. Then this is not your choice.</li>
 <li><strong><a href="http://puppetlabs.com/">Puppet</a></strong>: I didn&rsquo;t test it but I saw it consists on a web tool and you can have your deployment configuration up and running very quickly and effortlessly. The drawback is that it&rsquo;s too expensive for a small business. Here is the <a href="http://puppetlabs.com/puppet/how-to-buy">pricing</a>.</li>
 <li><strong>Jenkins</strong>: This is a powerful deployment management tool. I used it on Java projects mainly for <strong>CI</strong>. I always used it by installing it on the target server and with the aim of managing the deployments on that server only. It&rsquo;s open source.</li>
 <li><strong><a href="http://capistranorb.com/">Capistrano</a></strong>: This is a Ruby tool whose purpose is to automate tasks on remote servers. Although it&rsquo;s perfect for our purpose, it can be good for other tasks like automate audits of any number of machines, script arbitrary workflows over SSH, automate common tasks in software teams,&hellip; It&rsquo;s fully customizable and it&rsquo;s open-source. So I decided to go with it to manage my deployments.</li>
