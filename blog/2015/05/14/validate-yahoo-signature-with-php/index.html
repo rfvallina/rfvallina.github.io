@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Validate Yahoo Signature With PHP - Raúl Fuente Vallina - Software developer</title>
+  <meta name="author" content="Raúl Fuente Vallina">
+
+  
+  <meta name="description" content="Yahoo allows applications to be integrated on Yahoo sites for merchants or simply Yahoo site owners. When you develop an application for Yahoo, first &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Raúl Fuente Vallina" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet" type="text/css">
+<link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link href="/stylesheets/buttons.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link rel="icon" type="image/png" href="/images/logo.png"/>
+<!--- MathJax Configuration -->
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58002651-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Raúl Fuente Vallina</a></h1>
+  
+    <h2>Software developer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscribe" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS"><svg id="rss-feed" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 25px; width: 25px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1; fill: rgb(72, 131, 0);"></circle>
+  <path class="inner-shape" style="opacity: 1; fill: rgb(247, 247, 247);" transform="translate(20,20) scale(0.6)" d="M14.044,72.866C6.848,72.866,1,78.736,1,85.889c0,7.192,5.848,12.997,13.044,12.997c7.223,0,13.062-5.804,13.062-12.997 C27.106,78.736,21.267,72.866,14.044,72.866z M1.015,34.299v18.782c12.229,0,23.73,4.782,32.392,13.447 C42.057,75.172,46.832,86.725,46.832,99h18.865C65.697,63.321,36.672,34.3,1.015,34.299L1.015,34.299z M1.038,1v18.791 C44.657,19.792,80.16,55.329,80.16,99H99C99,44.979,55.048,1,1.038,1z"></path>
+</svg></a></li>
+  
+</ul>
+  
+  
+  
+  
+  
+<ul class="subscribe">
+  <li><a href="https://github.com/rfvallina" rel="subscribe-github" title="rfvallina on GitHub"><svg id="github" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 25px; width: 25px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1; fill: rgb(72, 131, 0);"></circle>
+  <path class="inner-shape" style="opacity: 1; fill: rgb(247, 247, 247);" transform="translate(20,20) scale(0.6)" d="M50,1C22.938,1,1,22.938,1,50s21.938,49,49,49s49-21.938,49-49S77.062,1,50,1z M79.099,79.099 c-3.782,3.782-8.184,6.75-13.083,8.823c-1.245,0.526-2.509,0.989-3.79,1.387v-7.344c0-3.86-1.324-6.699-3.972-8.517 c1.659-0.16,3.182-0.383,4.57-0.67c1.388-0.287,2.855-0.702,4.402-1.245c1.547-0.543,2.935-1.189,4.163-1.938 c1.228-0.75,2.409-1.723,3.541-2.919s2.082-2.552,2.847-4.067s1.372-3.334,1.818-5.455c0.446-2.121,0.67-4.458,0.67-7.01 c0-4.945-1.611-9.155-4.833-12.633c1.467-3.828,1.308-7.991-0.478-12.489l-1.197-0.143c-0.829-0.096-2.321,0.255-4.474,1.053 c-2.153,0.798-4.57,2.105-7.249,3.924c-3.797-1.053-7.736-1.579-11.82-1.579c-4.115,0-8.039,0.526-11.772,1.579 c-1.69-1.149-3.294-2.097-4.809-2.847c-1.515-0.75-2.727-1.26-3.637-1.532c-0.909-0.271-1.754-0.439-2.536-0.503 c-0.782-0.064-1.284-0.079-1.507-0.048c-0.223,0.031-0.383,0.064-0.478,0.096c-1.787,4.53-1.946,8.694-0.478,12.489 c-3.222,3.477-4.833,7.688-4.833,12.633c0,2.552,0.223,4.889,0.67,7.01c0.447,2.121,1.053,3.94,1.818,5.455 c0.765,1.515,1.715,2.871,2.847,4.067s2.313,2.169,3.541,2.919c1.228,0.751,2.616,1.396,4.163,1.938 c1.547,0.543,3.014,0.957,4.402,1.245c1.388,0.287,2.911,0.511,4.57,0.67c-2.616,1.787-3.924,4.626-3.924,8.517v7.487 c-1.445-0.43-2.869-0.938-4.268-1.53c-4.899-2.073-9.301-5.041-13.083-8.823c-3.782-3.782-6.75-8.184-8.823-13.083 C9.934,60.948,8.847,55.56,8.847,50s1.087-10.948,3.231-16.016c2.073-4.899,5.041-9.301,8.823-13.083s8.184-6.75,13.083-8.823 C39.052,9.934,44.44,8.847,50,8.847s10.948,1.087,16.016,3.231c4.9,2.073,9.301,5.041,13.083,8.823 c3.782,3.782,6.75,8.184,8.823,13.083c2.143,5.069,3.23,10.457,3.23,16.016s-1.087,10.948-3.231,16.016 C85.848,70.915,82.88,75.317,79.099,79.099L79.099,79.099z"></path>
+</svg></a></li>
+</ul>
+  
+  
+  
+  <ul class="subscribe">
+  <li><a href="https://twitter.com/rfvallina" rel="subscribe-twitter" title="@rfvallina on Twitter"><svg id="twitter" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 25px; width: 25px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1; fill: rgb(72, 131, 0);"></circle>
+  <path class="inner-shape" style="opacity: 1; fill: rgb(247, 247, 247);" transform="translate(20,20) scale(0.6)" d="M99.001,19.428c-3.606,1.608-7.48,2.695-11.547,3.184c4.15-2.503,7.338-6.466,8.841-11.189 c-3.885,2.318-8.187,4-12.768,4.908c-3.667-3.931-8.893-6.387-14.676-6.387c-11.104,0-20.107,9.054-20.107,20.223 c0,1.585,0.177,3.128,0.52,4.609c-16.71-0.845-31.525-8.895-41.442-21.131C6.092,16.633,5.1,20.107,5.1,23.813 c0,7.017,3.55,13.208,8.945,16.834c-3.296-0.104-6.397-1.014-9.106-2.529c-0.002,0.085-0.002,0.17-0.002,0.255 c0,9.799,6.931,17.972,16.129,19.831c-1.688,0.463-3.463,0.71-5.297,0.71c-1.296,0-2.555-0.127-3.783-0.363 c2.559,8.034,9.984,13.882,18.782,14.045c-6.881,5.424-15.551,8.657-24.971,8.657c-1.623,0-3.223-0.096-4.796-0.282 c8.898,5.738,19.467,9.087,30.82,9.087c36.982,0,57.206-30.817,57.206-57.543c0-0.877-0.02-1.748-0.059-2.617 C92.896,27.045,96.305,23.482,99.001,19.428z"></path>
+</svg></a></li>
+</ul>
+  
+  
+  <ul class="subscribe">
+  <li><a href="https://linkedin.com/in/rfvallina" rel="subscribe-linkedin" title="rfvallina on LinkedIn"><svg id="linkedin" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 25px; width: 25px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1; fill: rgb(72, 131, 0);"></circle>
+  <path class="inner-shape" style="opacity: 1; fill: rgb(247, 247, 247);" transform="translate(20,20) scale(0.6)" d="M82.539,1H17.461C8.408,1,1,8.408,1,17.461v65.078C1,91.592,8.408,99,17.461,99h65.078C91.592,99,99,91.592,99,82.539 V17.461C99,8.408,91.592,1,82.539,1z M37.75,80.625H25.5V37.75h12.25V80.625z M31.625,31.625c-3.383,0-6.125-2.742-6.125-6.125 s2.742-6.125,6.125-6.125s6.125,2.742,6.125,6.125S35.008,31.625,31.625,31.625z M80.625,80.625h-12.25v-24.5 c0-3.383-2.742-6.125-6.125-6.125s-6.125,2.742-6.125,6.125v24.5h-12.25V37.75h12.25v7.606c2.526-3.47,6.389-7.606,10.719-7.606 c7.612,0,13.782,6.856,13.782,15.312L80.625,80.625L80.625,80.625z"></path>
+</svg></a></li>
+</ul>
+  
+  
+  
+  
+    
+      <form action="https://www.google.com/search" method="get">
+        <fieldset role="search">
+          <input type="hidden" name="q" value="site:rfvallina.com" />
+    
+          <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+        </fieldset>
+      </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/portfolio">Portfolio</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Validate Yahoo Signature With PHP</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-05-14T12:53:20+02:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:53 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Yahoo allows applications to be integrated on Yahoo sites for merchants or simply Yahoo site owners. When you develop an application for Yahoo, first thing you have to do is to be able to validate the Yahoo signature to ensure all requests come from a Yahoo site.</p>
+
+<!-- more -->
+
+
+<p>The <a href="https://github.com/lexity/platform/wiki/API-Documentation">documentation</a> about developing an application for Yahoo is not really good but at least the section where it explains how to validate the signature comes with an example written in Ruby.</p>
+
+<p>Below is the <strong>Ruby</strong> code to validate the Yahoo signature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;digest/md5&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;cgi&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="n">app_secret</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">sorted_params</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'>  <span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">app_secret</span> <span class="o">+</span> <span class="n">sorted_params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">valid_signature?</span><span class="p">(</span><span class="n">query_params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">provided_signature</span> <span class="o">=</span> <span class="n">query_params</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;signature&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query_params</span><span class="o">.</span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span> <span class="n">query_params</span><span class="o">[</span><span class="no">CGI</span><span class="o">.</span><span class="n">unescape</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">]</span> <span class="o">=</span> <span class="no">CGI</span><span class="o">.</span><span class="n">unescape</span><span class="p">(</span><span class="n">v</span><span class="p">)}</span>
+</span><span class='line'>  <span class="n">provided_signature</span> <span class="o">==</span> <span class="n">signature</span><span class="p">(</span><span class="s2">&quot;sample_app_secret&quot;</span><span class="p">,</span> <span class="n">query_params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Assume that the query parameters arrive in a hash (while still url-encoded), like:</span>
+</span><span class='line'><span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'> <span class="s2">&quot;token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;735c433875c919a4a7bc2b40e695b809&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;app_token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sample_app_key&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;store_url&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;http%3A%2F%2Fexample-store.com&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;pid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;a123b456&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;timestamp&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1346884490&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;signature&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;3f1e8aba4426ff6f5d5bf579a4204e60&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And here is the <strong>PHP</strong> code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='PHP'><span class='line'><span class="k">function</span> <span class="nf">validSignature</span><span class="p">(</span><span class="nv">$queryParams</span><span class="p">){</span>
+</span><span class='line'>  <span class="nv">$providedSignature</span> <span class="o">=</span> <span class="nv">$queryParams</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="nb">unset</span><span class="p">(</span><span class="nv">$queryParams</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">]);</span>
+</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">){</span>
+</span><span class='line'>      <span class="nv">$queryParams</span><span class="p">[</span><span class="nb">urldecode</span><span class="p">(</span><span class="nv">$key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">urldecode</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">signature</span><span class="p">(</span><span class="s2">&quot;sample_app_secret&quot;</span><span class="p">,</span> <span class="nv">$queryParams</span><span class="p">)</span> <span class="o">===</span> <span class="nv">$providedSignature</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">signature</span><span class="p">(</span><span class="nv">$appSecret</span><span class="p">,</span> <span class="nv">$queryParams</span><span class="p">){</span>
+</span><span class='line'>  <span class="nv">$params</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">)</span>
+</span><span class='line'>      <span class="nv">$params</span> <span class="o">.=</span> <span class="s2">&quot;</span><span class="si">$key</span><span class="s2">=</span><span class="si">$value</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$chars</span> <span class="o">=</span> <span class="nb">str_split</span><span class="p">(</span><span class="nv">$params</span><span class="p">);</span>
+</span><span class='line'>  <span class="nb">sort</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$sortedParams</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$appSecret</span> <span class="o">.</span> <span class="nv">$sortedParams</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Assume that the query parameters arrive in a hash (while still url-encoded), like:</span>
+</span><span class='line'><span class="nv">$queryParams</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'> <span class="s2">&quot;token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;735c433875c919a4a7bc2b40e695b809&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;app_token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sample_app_key&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;store_url&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;http%3A%2F%2Fexample-store.com&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;pid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;a123b456&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;timestamp&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1346884490&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;signature&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;3f1e8aba4426ff6f5d5bf579a4204e60&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Decide yourself which is more elegant, though I have my own opinion.</p>
+
+<p>Here is a funny video which briefly explains some differences between PHP and Ruby.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/g9CmE_miCaE" frameborder="0" allowfullscreen></iframe>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+
+  <span class="byline author vcard">Authored by <span class="fn">
+  
+    Raúl Fuente Vallina
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-05-14T12:53:20+02:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:53 pm</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php/'>php</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/yahoo/'>yahoo</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/" data-via="rfvallina" data-counturl="http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-layout="button_count" data-send="false" data-width="300" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/01/deployment-management-on-multiple-aws-instances-with-capistrano-3/" title="Previous Post: Deployment management on multiple AWS instances with Capistrano 3">&laquo; Deployment management on multiple AWS instances with Capistrano 3</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Raúl Fuente Vallina
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rfvallinacom';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/';
+        var disqus_url = 'http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

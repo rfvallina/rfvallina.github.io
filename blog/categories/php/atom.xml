@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-02-02T22:47:40+01:00</updated>
+  <updated>2015-05-14T15:56:05+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Validate Yahoo Signature With PHP]]></title>
+    <link href="http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/"/>
+    <updated>2015-05-14T12:53:20+02:00</updated>
+    <id>http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php</id>
+    <content type="html"><![CDATA[<p>Yahoo allows applications to be integrated on Yahoo sites for merchants or simply Yahoo site owners. When you develop an application for Yahoo, first thing you have to do is to be able to validate the Yahoo signature to ensure all requests come from a Yahoo site.</p>
+
+<!-- more -->
+
+
+<p>The <a href="https://github.com/lexity/platform/wiki/API-Documentation">documentation</a> about developing an application for Yahoo is not really good but at least the section where it explains how to validate the signature comes with an example written in Ruby.</p>
+
+<p>Below is the <strong>Ruby</strong> code to validate the Yahoo signature.</p>
+
+<pre><code class="ruby">require "digest/md5"
+require "cgi"
+
+def signature(app_secret, parameters)
+  sorted_params = parameters.collect{|k,v| "#{k}=#{v}"}.sort.join
+  Digest::MD5.hexdigest(app_secret + sorted_params)
+end
+
+def valid_signature?(query_params)
+  provided_signature = query_params.delete("signature")
+  query_params.each{|k,v| query_params[CGI.unescape(k)] = CGI.unescape(v)}
+  provided_signature == signature("sample_app_secret", query_params)
+end
+
+# Assume that the query parameters arrive in a hash (while still url-encoded), like:
+query_params = {
+ "token" =&gt; "735c433875c919a4a7bc2b40e695b809",
+ "app_token" =&gt; "sample_app_key",
+ "store_url" =&gt; "http%3A%2F%2Fexample-store.com",
+ "pid" =&gt; "a123b456",
+ "timestamp" =&gt; "1346884490",
+ "signature" =&gt; "3f1e8aba4426ff6f5d5bf579a4204e60"
+}
+</code></pre>
+
+<p>And here is the <strong>PHP</strong> code.</p>
+
+<pre><code class="PHP">function validSignature($queryParams){
+    $providedSignature = $queryParams['signature'];
+    unset($queryParams['signature']);
+    foreach($queryParams as $key=&gt;$value){
+        $queryParams[urldecode($key)] = urldecode($value);
+    }
+    return signature("sample_app_secret", $queryParams) === $providedSignature;
+}
+
+function signature($appSecret, $queryParams){
+    $params = "";
+    foreach($queryParams as $key=&gt;$value)
+        $params .= "$key=$value";
+    $chars = str_split($params);
+    sort($chars);
+    $sortedParams = implode($chars);
+    return md5($appSecret . $sortedParams);
+}
+
+//Assume that the query parameters arrive in a hash (while still url-encoded), like:
+$queryParams = {
+ "token" =&gt; "735c433875c919a4a7bc2b40e695b809",
+ "app_token" =&gt; "sample_app_key",
+ "store_url" =&gt; "http%3A%2F%2Fexample-store.com",
+ "pid" =&gt; "a123b456",
+ "timestamp" =&gt; "1346884490",
+ "signature" =&gt; "3f1e8aba4426ff6f5d5bf579a4204e60"
+}
+</code></pre>
+
+<p>Decide yourself which is more elegant, though I have my own opinion.</p>
+
+<p>Here is a funny video which briefly explains some differences between PHP and Ruby.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/g9CmE_miCaE" frameborder="0" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Deployment Management on Multiple AWS Instances With Capistrano 3]]></title>

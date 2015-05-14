@@ -4,7 +4,7 @@
   <title><![CDATA[Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-02-02T22:47:40+01:00</updated>
+  <updated>2015-05-14T15:56:05+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,139 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Validate Yahoo Signature With PHP]]></title>
+    <link href="http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php/"/>
+    <updated>2015-05-14T12:53:20+02:00</updated>
+    <id>http://rfvallina.com/blog/2015/05/14/validate-yahoo-signature-with-php</id>
+    <content type="html"><![CDATA[<p>Yahoo allows applications to be integrated on Yahoo sites for merchants or simply Yahoo site owners. When you develop an application for Yahoo, first thing you have to do is to be able to validate the Yahoo signature to ensure all requests come from a Yahoo site.</p>
+
+<!-- more -->
+
+
+<p>The <a href="https://github.com/lexity/platform/wiki/API-Documentation">documentation</a> about developing an application for Yahoo is not really good but at least the section where it explains how to validate the signature comes with an example written in Ruby.</p>
+
+<p>Below is the <strong>Ruby</strong> code to validate the Yahoo signature.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;digest/md5&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;cgi&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="n">app_secret</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">sorted_params</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'>  <span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">app_secret</span> <span class="o">+</span> <span class="n">sorted_params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">valid_signature?</span><span class="p">(</span><span class="n">query_params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">provided_signature</span> <span class="o">=</span> <span class="n">query_params</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;signature&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">query_params</span><span class="o">.</span><span class="n">each</span><span class="p">{</span><span class="o">|</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">|</span> <span class="n">query_params</span><span class="o">[</span><span class="no">CGI</span><span class="o">.</span><span class="n">unescape</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">]</span> <span class="o">=</span> <span class="no">CGI</span><span class="o">.</span><span class="n">unescape</span><span class="p">(</span><span class="n">v</span><span class="p">)}</span>
+</span><span class='line'>  <span class="n">provided_signature</span> <span class="o">==</span> <span class="n">signature</span><span class="p">(</span><span class="s2">&quot;sample_app_secret&quot;</span><span class="p">,</span> <span class="n">query_params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Assume that the query parameters arrive in a hash (while still url-encoded), like:</span>
+</span><span class='line'><span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'> <span class="s2">&quot;token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;735c433875c919a4a7bc2b40e695b809&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;app_token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sample_app_key&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;store_url&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;http%3A%2F%2Fexample-store.com&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;pid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;a123b456&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;timestamp&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1346884490&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;signature&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;3f1e8aba4426ff6f5d5bf579a4204e60&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And here is the <strong>PHP</strong> code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='PHP'><span class='line'><span class="k">function</span> <span class="nf">validSignature</span><span class="p">(</span><span class="nv">$queryParams</span><span class="p">){</span>
+</span><span class='line'>  <span class="nv">$providedSignature</span> <span class="o">=</span> <span class="nv">$queryParams</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="nb">unset</span><span class="p">(</span><span class="nv">$queryParams</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">]);</span>
+</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">){</span>
+</span><span class='line'>      <span class="nv">$queryParams</span><span class="p">[</span><span class="nb">urldecode</span><span class="p">(</span><span class="nv">$key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">urldecode</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">signature</span><span class="p">(</span><span class="s2">&quot;sample_app_secret&quot;</span><span class="p">,</span> <span class="nv">$queryParams</span><span class="p">)</span> <span class="o">===</span> <span class="nv">$providedSignature</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">signature</span><span class="p">(</span><span class="nv">$appSecret</span><span class="p">,</span> <span class="nv">$queryParams</span><span class="p">){</span>
+</span><span class='line'>  <span class="nv">$params</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">)</span>
+</span><span class='line'>      <span class="nv">$params</span> <span class="o">.=</span> <span class="s2">&quot;</span><span class="si">$key</span><span class="s2">=</span><span class="si">$value</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$chars</span> <span class="o">=</span> <span class="nb">str_split</span><span class="p">(</span><span class="nv">$params</span><span class="p">);</span>
+</span><span class='line'>  <span class="nb">sort</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$sortedParams</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$appSecret</span> <span class="o">.</span> <span class="nv">$sortedParams</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Assume that the query parameters arrive in a hash (while still url-encoded), like:</span>
+</span><span class='line'><span class="nv">$queryParams</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'> <span class="s2">&quot;token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;735c433875c919a4a7bc2b40e695b809&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;app_token&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sample_app_key&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;store_url&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;http%3A%2F%2Fexample-store.com&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;pid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;a123b456&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;timestamp&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;1346884490&quot;</span><span class="p">,</span>
+</span><span class='line'> <span class="s2">&quot;signature&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;3f1e8aba4426ff6f5d5bf579a4204e60&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Decide yourself which is more elegant, though I have my own opinion.</p>
+
+<p>Here is a funny video which briefly explains some differences between PHP and Ruby.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/g9CmE_miCaE" frameborder="0" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Deployment Management on Multiple AWS Instances With Capistrano 3]]></title>
