@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-05-14T15:56:05+02:00</updated>
+  <updated>2015-05-28T16:28:25+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -64,12 +64,12 @@ query_params = {
 }
 
 function signature($appSecret, $queryParams){
-    $params = "";
-    foreach($queryParams as $key=&gt;$value)
-        $params .= "$key=$value";
-    $chars = str_split($params);
-    sort($chars);
-    $sortedParams = implode($chars);
+    $params = array();
+    foreach($queryParams as $key=&gt;$value){
+        $params[] = "$key=$value";
+    }
+    sort($params);
+    $sortedParams = implode($params);
     return md5($appSecret . $sortedParams);
 }
 

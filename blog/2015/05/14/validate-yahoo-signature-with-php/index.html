@@ -238,12 +238,12 @@
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">function</span> <span class="nf">signature</span><span class="p">(</span><span class="nv">$appSecret</span><span class="p">,</span> <span class="nv">$queryParams</span><span class="p">){</span>
-</span><span class='line'>  <span class="nv">$params</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">)</span>
-</span><span class='line'>      <span class="nv">$params</span> <span class="o">.=</span> <span class="s2">&quot;</span><span class="si">$key</span><span class="s2">=</span><span class="si">$value</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="nv">$chars</span> <span class="o">=</span> <span class="nb">str_split</span><span class="p">(</span><span class="nv">$params</span><span class="p">);</span>
-</span><span class='line'>  <span class="nb">sort</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
-</span><span class='line'>  <span class="nv">$sortedParams</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="nv">$chars</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$params</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">foreach</span><span class="p">(</span><span class="nv">$queryParams</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">){</span>
+</span><span class='line'>      <span class="nv">$params</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">$key</span><span class="s2">=</span><span class="si">$value</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nb">sort</span><span class="p">(</span><span class="nv">$params</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$sortedParams</span> <span class="o">=</span> <span class="nb">implode</span><span class="p">(</span><span class="nv">$params</span><span class="p">);</span>
 </span><span class='line'>  <span class="k">return</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$appSecret</span> <span class="o">.</span> <span class="nv">$sortedParams</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
