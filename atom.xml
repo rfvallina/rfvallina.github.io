@@ -4,7 +4,7 @@
   <title><![CDATA[Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-06-19T00:39:49+02:00</updated>
+  <updated>2015-08-23T12:57:37+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,280 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preview TIFF and PDF Files Using HTML5 File API]]></title>
+    <link href="http://rfvallina.com/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api/"/>
+    <updated>2015-08-22T20:29:32+02:00</updated>
+    <id>http://rfvallina.com/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api</id>
+    <content type="html"><![CDATA[<p>Sometimes you need to read files which are in the user&rsquo;s local machine. Here is where HTML <a href="http://www.w3.org/TR/FileAPI/"><strong>File API</strong></a> comes into play. The use case I&rsquo;m going to explain is when you want to make a preview of an image which has not been uploaded anywhere yet, so you don&rsquo;t have the url of the image.</p>
+
+<!-- more -->
+
+
+<p>Also, if the file is TIFF or PDF the thing complicates. But the good news is that the preview is also possible. All the examples below make use of jQuery library. If you are interested how, continue reading.</p>
+
+<h3>Preview web standard images</h3>
+
+<p>Below is the usual way of reading files using File API to make a preview of a standard <strong>JPG</strong> or <strong>PNG</strong> image.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;h2&gt;</span>Image Preview<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'><span class="nt">&lt;label&gt;</span>Select a file (jpg, jpeg, png)<span class="nt">&lt;/label&gt;&lt;br/&gt;</span>
+</span><span class='line'><span class="nt">&lt;div&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span><span class="nt">/&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">fileTypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">];</span>  <span class="c1">//acceptable file types</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input:file&quot;</span><span class="p">).</span><span class="nx">change</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">parentEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">();</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">tgt</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">,</span>
+</span><span class='line'>                      <span class="nx">files</span> <span class="o">=</span> <span class="nx">tgt</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// FileReader support</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">FileReader</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">extension</span> <span class="o">=</span> <span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">).</span><span class="nx">pop</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span>
+</span><span class='line'>          <span class="nx">fr</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">success</span> <span class="o">=</span> <span class="nx">fileTypes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">extension</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span>
+</span><span class='line'>                  <span class="nx">$</span><span class="p">(</span><span class="nx">parentEl</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">fr</span><span class="p">.</span><span class="nx">result</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;preview&quot;/&gt;&#39;</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="nx">fr</span><span class="p">.</span><span class="nx">onloadend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>              <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Load End&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="nx">fr</span><span class="p">.</span><span class="nx">readAsDataURL</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that first thing is to get the reference of the file/s on the change event. After that, we have to create an instance of <strong>FileReader</strong> to be able to read the file properly. Once we make sure that our browser supports FileReader and we have a reference to the file, then we read the file.</p>
+
+<p>The outstanding aspect here is how we are reading the file with FileReader. Some methods are provided to read files. In this particular case we use <strong><em>FileReader.readAsDataURL(Blob|File)</em></strong> because the result property will contain the file/blob&rsquo;s data encoded as a data URL and that&rsquo;s what we are looking for in the <code>&lt;img&gt;</code> tag.</p>
+
+<h3>Preview TIFF images</h3>
+
+<p>Displaying a tiff image on the web has been always a nightmare. And still there&rsquo;s no standard way of achieving it. For our example we&rsquo;ll use  <a href="https://github.com/seikichi/tiff.js/tree/master"><strong>seikichi&rsquo;s tiff.js library</strong></a>.</p>
+
+<p>Remember to add tiff js library.</p>
+
+<p><code>&lt;script src="https://cdn.rawgit.com/seikichi/tiff.js/master/tiff.min.js"&gt;&lt;/script&gt;</code></p>
+
+<p>Now, our fileTypes array will have support for tiff files only.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">fileTypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tiff&#39;</span><span class="p">,</span> <span class="s1">&#39;tif&#39;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And, here is how we read and render tiff files.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">FileReader</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extension</span> <span class="o">=</span> <span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">).</span><span class="nx">pop</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">success</span> <span class="o">=</span> <span class="nx">fileTypes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">extension</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">//Using tiff.min.js library - https://github.com/seikichi/tiff.js/tree/master</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Parsing TIFF image...&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="c1">//initialize with 100MB for large files</span>
+</span><span class='line'>          <span class="nx">Tiff</span><span class="p">.</span><span class="nx">initialize</span><span class="p">({</span>
+</span><span class='line'>            <span class="nx">TOTAL_MEMORY</span><span class="o">:</span> <span class="mi">100000000</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">tiff</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tiff</span><span class="p">({</span>
+</span><span class='line'>            <span class="nx">buffer</span><span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">tiffCanvas</span> <span class="o">=</span> <span class="nx">tiff</span><span class="p">.</span><span class="nx">toCanvas</span><span class="p">();</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="nx">tiffCanvas</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+</span><span class='line'>            <span class="s2">&quot;max-width&quot;</span><span class="o">:</span> <span class="s2">&quot;100px&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;width&quot;</span><span class="o">:</span> <span class="s2">&quot;100%&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;height&quot;</span><span class="o">:</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;display&quot;</span><span class="o">:</span> <span class="s2">&quot;block&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;padding-top&quot;</span><span class="o">:</span> <span class="s2">&quot;10px&quot;</span>
+</span><span class='line'>          <span class="p">}).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;preview&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="nx">parentEl</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">tiffCanvas</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">onloadend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Load End&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">readAsArrayBuffer</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The main difference here is now we are reading the file using <strong><em>FileReader.readAsArrayBuffer(Blob|File)</em></strong> and the image will be rendered on a HTML5 Canvas element.</p>
+
+<h3>Preview PDF files</h3>
+
+<p>Obviously, PDF files are not web compliant, so we have to make use of external libraries which help us deal with these type of files. A very well-known is the <a href="https://mozilla.github.io/pdf.js/"><strong>Mozilla PDF JS library</strong></a>. In our example we are going do a preview of the first page of the pdf file.</p>
+
+<p>First, remember to include pdf js library in your html. You have to follow the steps described in the documentation to build the pdf.js project and generate the necessary pdf.js and pdf.worker.js files.</p>
+
+<p>Now, our fileTypes array will have support for pdf files.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">fileTypes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pdf&#39;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Below is how we read the first page of a pdf file and render it on a HTML5 Canvas element.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">FileReader</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span> <span class="o">&amp;&amp;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extension</span> <span class="o">=</span> <span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">).</span><span class="nx">pop</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">success</span> <span class="o">=</span> <span class="nx">fileTypes</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">extension</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Parsing PDF document...&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="c1">//PDFJS.workerSrc = &#39;&lt;path_to_pdf.worker.js&gt;&#39;;</span>
+</span><span class='line'>          <span class="nx">PDFJS</span><span class="p">.</span><span class="nx">getDocument</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">getPdf</span><span class="p">(</span><span class="nx">pdf</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//</span>
+</span><span class='line'>            <span class="c1">// Fetch the first page</span>
+</span><span class='line'>            <span class="c1">//</span>
+</span><span class='line'>            <span class="nx">pdf</span><span class="p">.</span><span class="nx">getPage</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">getPage</span><span class="p">(</span><span class="nx">page</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">scale</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">;</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">viewport</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">getViewport</span><span class="p">(</span><span class="nx">scale</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="c1">//</span>
+</span><span class='line'>              <span class="c1">// Prepare canvas using PDF page dimensions</span>
+</span><span class='line'>              <span class="c1">//</span>
+</span><span class='line'>              <span class="nx">$</span><span class="p">(</span><span class="nx">parentEl</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;canvas id=&quot;pdf-image&quot; class=&quot;preview&quot;/&gt;&#39;</span><span class="p">);</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">parentEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;canvas.preview&quot;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+</span><span class='line'>              <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">viewport</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+</span><span class='line'>              <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">viewport</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="c1">//</span>
+</span><span class='line'>              <span class="c1">// Render PDF page into canvas context</span>
+</span><span class='line'>              <span class="c1">//</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">renderContext</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">canvasContext</span><span class="o">:</span> <span class="nx">context</span><span class="p">,</span>
+</span><span class='line'>                <span class="nx">viewport</span><span class="o">:</span> <span class="nx">viewport</span>
+</span><span class='line'>              <span class="p">};</span>
+</span><span class='line'>              <span class="nx">page</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">renderContext</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">onloadend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Load End&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="nx">fr</span><span class="p">.</span><span class="nx">readAsArrayBuffer</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can view or download the <a href="http://plnkr.co/edit/o7j0segKRpjJHwhh8WGO?p=preview"><strong>full example on this plunker</strong></a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Logging as a Service]]></title>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Images | Raúl Fuente Vallina]]></title>
+  <link href="http://rfvallina.com/blog/categories/images/atom.xml" rel="self"/>
+  <link href="http://rfvallina.com/"/>
+  <updated>2015-08-23T12:57:37+02:00</updated>
+  <id>http://rfvallina.com/</id>
+  <author>
+    <name><![CDATA[Raúl Fuente Vallina]]></name>
+    <email><![CDATA[raul@rfvallina.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Preview TIFF and PDF Files Using HTML5 File API]]></title>
+    <link href="http://rfvallina.com/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api/"/>
+    <updated>2015-08-22T20:29:32+02:00</updated>
+    <id>http://rfvallina.com/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api</id>
+    <content type="html"><![CDATA[<p>Sometimes you need to read files which are in the user&rsquo;s local machine. Here is where HTML <a href="http://www.w3.org/TR/FileAPI/"><strong>File API</strong></a> comes into play. The use case I&rsquo;m going to explain is when you want to make a preview of an image which has not been uploaded anywhere yet, so you don&rsquo;t have the url of the image.</p>
+
+<!-- more -->
+
+
+<p>Also, if the file is TIFF or PDF the thing complicates. But the good news is that the preview is also possible. All the examples below make use of jQuery library. If you are interested how, continue reading.</p>
+
+<h3>Preview web standard images</h3>
+
+<p>Below is the usual way of reading files using File API to make a preview of a standard <strong>JPG</strong> or <strong>PNG</strong> image.</p>
+
+<p>&#8220;` html</p>
+
+<h2>Image Preview</h2>
+
+
+<p><label>Select a file (jpg, jpeg, png)</label><br/></p>
+
+<div><input type="file"/></div>
+
+
+<pre><code></code></pre>
+
+<p>$(document).ready(function () {
+    var fileTypes = [&lsquo;jpg&rsquo;, &lsquo;jpeg&rsquo;, &lsquo;png&rsquo;];  //acceptable file types
+    $(&ldquo;input:file&rdquo;).change(function (evt) {
+        var parentEl = $(this).parent();
+        var tgt = evt.target || window.event.srcElement,
+                        files = tgt.files;</p>
+
+<pre><code>    // FileReader support
+    if (FileReader &amp;&amp; files &amp;&amp; files.length) {
+        var fr = new FileReader();
+        var extension = files[0].name.split('.').pop().toLowerCase(); 
+        fr.onload = function (e) {
+            success = fileTypes.indexOf(extension) &gt; -1;
+            if(success)
+                $(parentEl).append('&lt;img src="' + fr.result + '" class="preview"/&gt;');
+        }
+        fr.onloadend = function(e){
+            console.debug("Load End");
+        }
+        fr.readAsDataURL(files[0]);
+    }   
+});
+</code></pre>
+
+<p>});
+&#8220;`</p>
+
+<p>Note that first thing is to get the reference of the file/s on the change event. After that, we have to create an instance of <strong>FileReader</strong> to be able to read the file properly. Once we make sure that our browser supports FileReader and we have a reference to the file, then we read the file.</p>
+
+<p>The outstanding aspect here is how we are reading the file with FileReader. Some methods are provided to read files. In this particular case we use <strong><em>FileReader.readAsDataURL(Blob|File)</em></strong> because the result property will contain the file/blob&rsquo;s data encoded as a data URL and that&rsquo;s what we are looking for in the <code>&lt;img&gt;</code> tag.</p>
+
+<h3>Preview TIFF images</h3>
+
+<p>Displaying a tiff image on the web has been always a nightmare. And still there&rsquo;s no standard way of achieving it. For our example we&rsquo;ll use  <a href="https://github.com/seikichi/tiff.js/tree/master"><strong>seikichi&rsquo;s tiff.js library</strong></a>.</p>
+
+<p>Remember to add tiff js library.</p>
+
+<p><code>&lt;script src="https://cdn.rawgit.com/seikichi/tiff.js/master/tiff.min.js"&gt;&lt;/script&gt;</code></p>
+
+<p>Now, our fileTypes array will have support for tiff files only.</p>
+
+<pre><code class="js">var fileTypes = ['tiff', 'tif'];
+</code></pre>
+
+<p>And, here is how we read and render tiff files.</p>
+
+<pre><code class="js">if (FileReader &amp;&amp; files &amp;&amp; files.length) {
+      var fr = new FileReader();
+      var extension = files[0].name.split('.').pop().toLowerCase();
+      fr.onload = function(e) {
+        success = fileTypes.indexOf(extension) &gt; -1;
+        if (success) {
+          //Using tiff.min.js library - https://github.com/seikichi/tiff.js/tree/master
+          console.debug("Parsing TIFF image...");
+          //initialize with 100MB for large files
+          Tiff.initialize({
+            TOTAL_MEMORY: 100000000
+          });
+          var tiff = new Tiff({
+            buffer: e.target.result
+          });
+          var tiffCanvas = tiff.toCanvas();
+          $(tiffCanvas).css({
+            "max-width": "100px",
+            "width": "100%",
+            "height": "auto",
+            "display": "block",
+            "padding-top": "10px"
+          }).addClass("preview");
+          $(parentEl).append(tiffCanvas);
+        }
+
+      }
+      fr.onloadend = function(e) {
+        console.debug("Load End");
+      }
+      fr.readAsArrayBuffer(files[0]);
+ }
+</code></pre>
+
+<p>The main difference here is now we are reading the file using <strong><em>FileReader.readAsArrayBuffer(Blob|File)</em></strong> and the image will be rendered on a HTML5 Canvas element.</p>
+
+<h3>Preview PDF files</h3>
+
+<p>Obviously, PDF files are not web compliant, so we have to make use of external libraries which help us deal with these type of files. A very well-known is the <a href="https://mozilla.github.io/pdf.js/"><strong>Mozilla PDF JS library</strong></a>. In our example we are going do a preview of the first page of the pdf file.</p>
+
+<p>First, remember to include pdf js library in your html. You have to follow the steps described in the documentation to build the pdf.js project and generate the necessary pdf.js and pdf.worker.js files.</p>
+
+<p>Now, our fileTypes array will have support for pdf files.</p>
+
+<pre><code class="js">var fileTypes = ['pdf'];
+</code></pre>
+
+<p>Below is how we read the first page of a pdf file and render it on a HTML5 Canvas element.</p>
+
+<pre><code class="js">if (FileReader &amp;&amp; files &amp;&amp; files.length) {
+      var fr = new FileReader();
+      var extension = files[0].name.split('.').pop().toLowerCase();
+      fr.onload = function(e) {
+        success = fileTypes.indexOf(extension) &gt; -1;
+        if (success) {
+          console.debug("Parsing PDF document...");
+          //PDFJS.workerSrc = '&lt;path_to_pdf.worker.js&gt;';
+          PDFJS.getDocument(e.target.result).then(function getPdf(pdf) {
+            //
+            // Fetch the first page
+            //
+            pdf.getPage(1).then(function getPage(page) {
+              var scale = 1.5;
+              var viewport = page.getViewport(scale);
+
+              //
+              // Prepare canvas using PDF page dimensions
+              //
+              $(parentEl).append('&lt;canvas id="pdf-image" class="preview"/&gt;');
+              var canvas = $(parentEl).find("canvas.preview").get(0);
+              var context = canvas.getContext('2d');
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              //
+              // Render PDF page into canvas context
+              //
+              var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+              };
+              page.render(renderContext);
+            });
+          });
+        }
+
+      }
+      fr.onloadend = function(e) {
+        console.debug("Load End");
+      }
+      fr.readAsArrayBuffer(files[0]);
+ }
+</code></pre>
+
+<p>You can view or download the <a href="http://plnkr.co/edit/o7j0segKRpjJHwhh8WGO?p=preview"><strong>full example on this plunker</strong></a></p>
+]]></content>
+  </entry>
+  
+</feed>
