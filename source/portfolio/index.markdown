@@ -7,6 +7,30 @@ footer: false
 <div class="projects">
 	<div class="flip-container">
 		<div class="flipper" ontouchstart="this.classList.toggle('hover');">
+			<div class="front inditar">
+			</div>
+			<div class="back">
+				<div class="project-info">
+					<h3>Bigcommerce shop</h3>
+					<p>Development and maintenance of an online store based on BigCommerce platform.</p>
+					<p>BigCommerce, HTML5, CSS3, Less, jQuery, Git</p>
+				</div>
+			</div>
+		</div>
+		<div class="flipper right" ontouchstart="this.classList.toggle('hover');">
+			<div class="front riiwards">
+			</div>
+			<div class="back">
+				<div class="project-info">
+					<h3>Yahoo Application</h3>
+					<p>Integrate <a href="http://www.riiwards.com">Riiwards</a> solution into the Yahoo platform to allow Yahoo sites and Yahoo ecommerce stores to have access to Riiwards widgets and banners and provide their customers with extra features.</p>
+					<p>OAuth, PHP, MySQL, Yahoo</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="flip-container">
+		<div class="flipper" ontouchstart="this.classList.toggle('hover');">
 			<div class="front fishbowl">
 			</div>
 			<div class="back">
