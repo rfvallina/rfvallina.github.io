@@ -4,7 +4,7 @@
   <title><![CDATA[Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-08-23T12:57:37+02:00</updated>
+  <updated>2015-11-12T22:02:15+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,264 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Share Private Node.js Modules Across Applications (Locally)]]></title>
+    <link href="http://rfvallina.com/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally/"/>
+    <updated>2015-11-12T14:53:11+01:00</updated>
+    <id>http://rfvallina.com/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally</id>
+    <content type="html"><![CDATA[<p>In this post I&rsquo;m going to talk about a quite useful topic around Node.js: <strong>Code Reuse</strong>. I didn&rsquo;t find a good article enumerating the different options you have and the benefits and disadvantages of each of them. I have to deal with this in most of my Node projects so describing this can be of great help.</p>
+
+<!-- more -->
+
+
+<p>Suppose you have a bunch of private libraries you want to share on one or several applications. Let&rsquo;s say you developed some common functionality that can be used in different applications. You have to be able to share them across your Node applications in a centralized way, but privately, because you don&rsquo;t want them to be publicly accessed. These are only for our personal use.</p>
+
+<p>I&rsquo;m going to focus only in sharing libraries locally (not through a remote repository or whatever), which is good for development purposes. I might cover how to share libraries remotely in subsequent articles.</p>
+
+<p>Below are the different options available.</p>
+
+<ul>
+<li>Local installation (npm install <folder>)</li>
+<li>Local paths (npm install &ndash;save)</li>
+<li>Link (npm link)</li>
+<li>Create your own local registry</li>
+</ul>
+
+
+<h3>Local installation (npm install <folder>)</h3>
+
+<p>You can achieve this by using <strong>npm install</strong> command. Let&rsquo;s put an example. Suppose you have this folder structure.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>common_lib
+</span><span class='line'>├──lib
+</span><span class='line'>|   ├──lib1.js
+</span><span class='line'>|   ├──lib2.js
+</span><span class='line'>├──package.json
+</span><span class='line'>├──index.js
+</span><span class='line'>
+</span><span class='line'>app1
+</span><span class='line'>├──app.js
+</span><span class='line'>├──package.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You want to use <strong>common_lib</strong> module with its submodules in <strong>app1</strong> application.</p>
+
+<p><strong>lib1.js</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s1">&#39;use strict&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Lib1</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Constructing Lib1...&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Lib1</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helloLib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello Lib1&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Lib1</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">goodbyeLib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Goodbye Lib1&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Lib1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>lib2.js</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s1">&#39;use strict&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Lib2</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Constructing Lib2...&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Lib1</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helloLib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello Lib2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Lib1</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">goodbyeLib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Goodbye Lib2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Lib1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>index.js</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s1">&#39;use strict&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">lib1</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/lib1.js&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">lib2</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./lib/lib2.js&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">lib1</span> <span class="o">=</span> <span class="nx">lib1</span><span class="p">;</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">lib2</span> <span class="o">=</span> <span class="nx">lib2</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In <strong>package.json</strong> from common_lib module you&rsquo;ll need to indicate that the module is private (to avoid accidental publishing to npm) and the main file for your module.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">...</span>
+</span><span class='line'><span class="s2">&quot;name&quot;</span>    <span class="err">:</span> <span class="s2">&quot;common-lib&quot;</span><span class="err">,</span>
+</span><span class='line'><span class="s2">&quot;private&quot;</span> <span class="err">:</span> <span class="s2">&quot;true&quot;</span><span class="err">,</span>
+</span><span class='line'><span class="s2">&quot;main&quot;</span>    <span class="err">:</span> <span class="s2">&quot;index.js&quot;</span><span class="err">,</span>
+</span><span class='line'><span class="err">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, you have to install the common lib module under your app1 application.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /projects/app1
+</span><span class='line'><span class="nv">$ </span>npm install ../common_lib
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above commands created <strong>node_modules</strong> folder and installed common_lib module in it. Now, it&rsquo;s time to make use of the common libraries in my application. How would you do that?</p>
+
+<p><strong>app1.js</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s1">&#39;use strict&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">common_lib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;common-lib&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">lib1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">common_lib</span><span class="p">.</span><span class="nx">lib1</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">lib2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">common_lib</span><span class="p">.</span><span class="nx">lib2</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">lib1</span><span class="p">.</span><span class="nx">helloLib</span><span class="p">();</span>
+</span><span class='line'><span class="nx">lib2</span><span class="p">.</span><span class="nx">helloLib</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the result of running app1.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>node app1/app.js
+</span><span class='line'>Constructing Lib1...
+</span><span class='line'>Constructing Lib2...
+</span><span class='line'>Hello Lib1
+</span><span class='line'>Hello Lib2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Local paths (npm install &ndash;save)</h3>
+
+<p>There&rsquo;s another way of installing a module locally without pointing to any remote path. As of version 2.0.0 of Node.js you can install a local module directly using npm install &ndash;save. <a href="https://docs.npmjs.com/files/package.json#local-paths">This link</a> explains well how to achieve it.</p>
+
+<p>To make it accessible from app1, we would do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>app1
+</span><span class='line'><span class="nv">$ </span>npm install --save ../common-lib/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above command normalized our app1/package.json and also created <strong>node_modules/common-lib</strong> folder. It <strong>automatically</strong> added the dependency to the package.json file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;dependencies&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;common-lib&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now it&rsquo;s possible to run app1 successfully as indicated in the previous example.</p>
+
+<h3>Link (npm link)</h3>
+
+<p>The previous options are good but every time you make changes in common_lib module you have to reinstall the module in all applications which use it. If common_lib is not yet stable or you keep on adding new features to it, it can be a hassle to rebuild each time.</p>
+
+<p>There&rsquo;s a better choice to deal with this: <a href="https://docs.npmjs.com/cli/link"><strong>npm link</strong></a>. This is only recommended for <strong>development environments</strong>.</p>
+
+<p>Suppose we have the same project structure as in the previous example. This is how you would achieve sharing common-lib in other projects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>app1
+</span><span class='line'><span class="nv">$ </span>npm link ../common_lib
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we have a <strong>node_modules</strong> folder under app1 and a link to common_lib folder inside. Every time we make a change on our common_lib the changes will be automatically reflected in our app1 application, so this option is the one I like most for development.</p>
+
+<h3>Create your own local registry</h3>
+
+<p>Even though this option is recommendable for production environments I&rsquo;m going to include it in this chapter because it could be also good in development. Creating a node repository locally is perfectly valid but this option is the most time-consuming. This involves replicating CouchDB database, implement the API&rsquo;s,&hellip;</p>
+
+<p>I&rsquo;ve never tried it, but if you&rsquo;re a Java programmer or you have some Java knowledge, the concept would be similar to installing a Maven repository such as Nexus.</p>
+
+<p>This option would be recommendable when you have several modules you need to share across your organization, so installing a central private npm would be a good choice.</p>
+
+<p><a href="https://docs.npmjs.com/misc/registry">Here, it&rsquo;s the official documentation</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Preview TIFF and PDF Files Using HTML5 File API]]></title>

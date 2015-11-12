@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://rfvallina.com/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally/</loc>
+    <lastmod>2015-11-12T14:53:11+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://rfvallina.com/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api/</loc>
     <lastmod>2015-08-22T20:29:32+02:00</lastmod>
     <priority>0.8</priority>
@@ -32,25 +37,25 @@
   </url>
   <url>
     <loc>http://rfvallina.com/blog/archives/</loc>
-    <lastmod>2015-08-23T12:57:37+02:00</lastmod>
+    <lastmod>2015-11-12T22:02:15+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/</loc>
-    <lastmod>2015-08-23T12:57:37+02:00</lastmod>
+    <lastmod>2015-11-12T22:02:15+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/about/</loc>
-    <lastmod>2015-08-23T12:57:37+02:00</lastmod>
+    <lastmod>2015-11-12T22:02:15+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/portfolio/</loc>
-    <lastmod>2015-08-23T12:57:37+02:00</lastmod>
+    <lastmod>2015-11-12T22:02:15+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

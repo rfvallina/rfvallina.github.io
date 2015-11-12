@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Javascript, | Raúl Fuente Vallina]]></title>
-  <link href="http://rfvallina.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <title><![CDATA[Category: node.js | Raúl Fuente Vallina]]></title>
+  <link href="http://rfvallina.com/blog/categories/node-dot-js/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
   <updated>2015-11-12T22:02:15+01:00</updated>
   <id>http://rfvallina.com/</id>
