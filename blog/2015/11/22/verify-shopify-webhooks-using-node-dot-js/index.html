@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Javascript - Raúl Fuente Vallina - Software developer</title>
+  <title>Verify Shopify Webhooks Using Node.js - Raúl Fuente Vallina - Software developer</title>
   <meta name="author" content="Raúl Fuente Vallina">
 
   
-  <meta name="description" content="Category: javascript">
+  <meta name="description" content="As you might know if you have experience with the Shopify API, Shopify provides Webhooks, which is a tool for retrieving and storing data from a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://rfvallina.com/blog/categories/javascript">
+  <link rel="canonical" href="http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Raúl Fuente Vallina" type="application/atom+xml">
@@ -117,60 +117,129 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Javascript</h1>
+    
+      
+        <h1 class="entry-title">Verify Shopify Webhooks Using Node.js</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-22T20:17:17+01:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>8:17 pm</span></time>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>As you might know if you have experience with the <a href="https://docs.shopify.com/api">Shopify API</a>, Shopify provides <strong>Webhooks</strong>, which is a tool for retrieving and storing data from a certain event. They even allow managing Webhooks through the API. For instance, if you want your application to be notified when a new order is placed in your store, you may register a Webhook for the <em>create/order</em> event.</p>
 
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally/">Share Private Node.js Modules Across Applications (Locally)</a></h1>
-<time datetime="2015-11-12T14:53:11+01:00" pubdate><span class='month'>Nov</span> <span class='day'>12</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<p>But you might be wondering how to ensure that the incoming request actually comes from Shopify. The answer is yes, there&rsquo;s a way to guarantee that. Specially for security reasons, it&rsquo;s almost a must to verify webhooks. At the time of writing this there&rsquo;s no official documentation for <a href="https://docs.shopify.com/api/webhooks/using-webhooks#verify-webhook">verifying webhooks</a> in Node.js, so I&rsquo;m going to explain how to do it. It&rsquo;s pretty straightforward.</p>
 
+<p>Webhooks can be verified by calculating a digital signature. Each Webhook request includes a <strong>X-Shopify-Hmac-SHA256</strong> header which is generated using the app&rsquo;s shared secret, along with the data sent in the request. To verify that the request came from Shopify, compute the HMAC digest according to the following algorithm and compare it to the value in the <strong>X-Shopify-Hmac-SHA256</strong> header. If they match, you can be sure that the Webhook was sent from Shopify and the data has not been compromised.</p>
 
+<p>In this example I&rsquo;m going to use the <a href="http://expressjs.com/"><strong>Express</strong></a> framework with the <a href="https://www.npmjs.com/package/body-parser"><strong>body-parser</strong></a> middleware. Basically, what the code below is doing is verifying every incoming request. If the url path matches the one for my webhook event, then it calculates the signature. If the calculated signature matches the one that comes in the header it goes ahead processing the request. Otherwise it throws an error.</p>
 
-<article>
-  
-<h1><a href="/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api/">Preview TIFF and PDF Files Using HTML5 File API</a></h1>
-<time datetime="2015-08-22T20:29:32+02:00" pubdate><span class='month'>Aug</span> <span class='day'>22</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/canvas/'>canvas</a>, <a class='category' href='/blog/categories/filereader/'>filereader</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/images/'>images</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">verify</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">buf</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s1">&#39;shopify/webhook&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">calculated_signature</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s1">&#39;sha256&#39;</span><span class="p">,</span> <span class="s1">&#39;SHOPIFY_SHARED_SECRET&#39;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="s1">&#39;base64&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">calculated_signature</span> <span class="o">!=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;x-shopify-hmac-sha256&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Invalid signature. Access denied&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}));</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+  <span class="byline author vcard">Authored by <span class="fn">
   
+    Raúl Fuente Vallina
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-11-22T20:17:17+01:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>8:17 pm</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ecommerce/'>ecommerce</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a>, <a class='category' href='/blog/categories/shopify/'>shopify</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/" data-via="rfvallina" data-counturl="http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-layout="button_count" data-send="false" data-width="300" data-show-faces="false"></div>
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally/" title="Previous Post: Share private Node.js modules across applications (locally)">&laquo; Share private Node.js modules across applications (locally)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -185,7 +254,10 @@
       var disqus_shortname = 'rfvallinacom';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/';
+        var disqus_url = 'http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

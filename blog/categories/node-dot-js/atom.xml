@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node.js | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/node-dot-js/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-11-12T22:02:15+01:00</updated>
+  <updated>2015-11-22T20:51:24+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Verify Shopify Webhooks Using Node.js]]></title>
+    <link href="http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/"/>
+    <updated>2015-11-22T20:17:17+01:00</updated>
+    <id>http://rfvallina.com/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js</id>
+    <content type="html"><![CDATA[<p>As you might know if you have experience with the <a href="https://docs.shopify.com/api">Shopify API</a>, Shopify provides <strong>Webhooks</strong>, which is a tool for retrieving and storing data from a certain event. They even allow managing Webhooks through the API. For instance, if you want your application to be notified when a new order is placed in your store, you may register a Webhook for the <em>create/order</em> event.</p>
+
+<!-- more -->
+
+
+<p>But you might be wondering how to ensure that the incoming request actually comes from Shopify. The answer is yes, there&rsquo;s a way to guarantee that. Specially for security reasons, it&rsquo;s almost a must to verify webhooks. At the time of writing this there&rsquo;s no official documentation for <a href="https://docs.shopify.com/api/webhooks/using-webhooks#verify-webhook">verifying webhooks</a> in Node.js, so I&rsquo;m going to explain how to do it. It&rsquo;s pretty straightforward.</p>
+
+<p>Webhooks can be verified by calculating a digital signature. Each Webhook request includes a <strong>X-Shopify-Hmac-SHA256</strong> header which is generated using the app&rsquo;s shared secret, along with the data sent in the request. To verify that the request came from Shopify, compute the HMAC digest according to the following algorithm and compare it to the value in the <strong>X-Shopify-Hmac-SHA256</strong> header. If they match, you can be sure that the Webhook was sent from Shopify and the data has not been compromised.</p>
+
+<p>In this example I&rsquo;m going to use the <a href="http://expressjs.com/"><strong>Express</strong></a> framework with the <a href="https://www.npmjs.com/package/body-parser"><strong>body-parser</strong></a> middleware. Basically, what the code below is doing is verifying every incoming request. If the url path matches the one for my webhook event, then it calculates the signature. If the calculated signature matches the one that comes in the header it goes ahead processing the request. Otherwise it throws an error.</p>
+
+<pre><code class="js">app.use(bodyParser.json({
+    verify: function(req, res, buf, encoding) {
+        if (req.url.search('shopify/webhook') &gt;= 0) {
+            var calculated_signature = crypto.createHmac('sha256', 'SHOPIFY_SHARED_SECRET')
+                .update(buf)
+                .digest('base64');
+            if (calculated_signature != req.headers['x-shopify-hmac-sha256']) {
+                throw new Error('Invalid signature. Access denied');
+            }
+        }
+    }
+}));
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Share Private Node.js Modules Across Applications (Locally)]]></title>
