@@ -4,7 +4,7 @@
   <title><![CDATA[Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-11-22T20:51:24+01:00</updated>
+  <updated>2016-02-27T17:45:35+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,150 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Monitor Disk Space Usage Using Node.js]]></title>
+    <link href="http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js/"/>
+    <updated>2016-02-27T17:21:09+01:00</updated>
+    <id>http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js</id>
+    <content type="html"><![CDATA[<p>Sometimes, if you are a server administrator or you simply are an application owner but you have full rights on the server, you could be interested in being informed when the disk space is reaching the maximum capacity.</p>
+
+<!-- more -->
+
+
+<p>In my case I had to deal with this while setting up different AWS environments. In AWS there&rsquo;s no built-in alarm to monitor disk usage. Depending on the case, AWS could provide scripts to create custom metrics. Such is the case with <strong>disk usage</strong> metrics. AWS provides a <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html">set of scripts</a> to report memory, swap, and disk space utilization metrics for a Linux instance.</p>
+
+<h3>Drawback</h3>
+
+<ul>
+<li>You have to install these scripts manually</li>
+<li>AWS charges you for having custom metrics</li>
+</ul>
+
+
+<h3>Solution</h3>
+
+<p>A cheaper solution is to develop your own tool to report disk usage. I created a simple Node script which sends an email notification in case the available disk percentage falls below a certain threshold.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="s1">&#39;use strict&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">disk</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;diskusage&#39;</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">nodemailer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nodemailer&#39;</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">sendmailTransport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;nodemailer-sendmail-transport&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">THRESHOLD</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">disk</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">availablePercentage</span> <span class="o">=</span> <span class="p">((</span><span class="nx">info</span><span class="p">.</span><span class="nx">available</span> <span class="o">/</span> <span class="nx">info</span><span class="p">.</span><span class="nx">total</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">availablePercentage</span> <span class="o">&lt;=</span> <span class="nx">THRESHOLD</span><span class="p">){</span>
+</span><span class='line'>      <span class="c1">//Setup email data</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">transporter</span> <span class="o">=</span> <span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">(</span><span class="nx">sendmailTransport</span><span class="p">({</span>
+</span><span class='line'>          <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/usr/sbin/sendmail&#39;</span>
+</span><span class='line'>      <span class="p">}));</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">mailOptions</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">from</span><span class="o">:</span> <span class="s1">&#39;EC2 Admin &lt;admin-ec2@no-reply.com&gt;&#39;</span><span class="p">,</span> <span class="c1">// sender address</span>
+</span><span class='line'>          <span class="nx">to</span><span class="o">:</span> <span class="s1">&#39;address1@domain.com, address2@domain.com&#39;</span><span class="p">,</span> <span class="c1">// list of receivers</span>
+</span><span class='line'>          <span class="nx">subject</span><span class="o">:</span> <span class="s1">&#39;Disk Usage Warning!!!&#39;</span><span class="p">,</span> <span class="c1">// Subject line</span>
+</span><span class='line'>          <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Only &#39;</span> <span class="o">+</span> <span class="nx">availablePercentage</span> <span class="o">+</span> <span class="s1">&#39;% of disk space is available&#39;</span> <span class="c1">// plaintext body</span>
+</span><span class='line'>      <span class="p">};</span>
+</span><span class='line'>      <span class="c1">//Send email</span>
+</span><span class='line'>      <span class="nx">transporter</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">(</span><span class="nx">mailOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">info</span><span class="p">){</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Message sent: &#39;</span> <span class="o">+</span> <span class="nx">info</span><span class="p">.</span><span class="nx">response</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you see, the script requires to use three third-party node modules. <strong>diskusage</strong> is responsible to check the disk space, while <strong>nodemailer</strong> and <strong>nodemailer-sendmail-transport</strong> are responsible for sending the email notification. It assumes that sendmail is installed in the system to ensure the message reaches its destination.</p>
+
+<p>Below is the <strong>package.json</strong> used to setup the script. You have to type <strong>npm install</strong> to have all the necessary modules installed.
+And type <strong>node app.js</strong> to run the script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span>        <span class="p">:</span> <span class="s2">&quot;disk-usage-alarm&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;version&quot;</span>     <span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;private&quot;</span>     <span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;description&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;author&quot;</span>      <span class="p">:</span> <span class="s2">&quot;rfvallina&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;homepage&quot;</span>    <span class="p">:</span> <span class="s2">&quot;http://rfvallina.com&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;diskusage&quot;</span><span class="p">:</span> <span class="s2">&quot;^0.1.4&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;nodemailer&quot;</span><span class="p">:</span> <span class="s2">&quot;^2.0.0&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;nodemailer-sendmail-transport&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Cron setup</h3>
+
+<p>If you want the script to run on a regular basis, let cron daemon do it. Below are the steps to add it to crontab.</p>
+
+<ul>
+<li>Edit crontab</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>crontab -e
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Add entry to crontab. Place the below text in crontab.</li>
+</ul>
+
+
+<p>0 * * * * node /path/to/script/app.js</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Verify Shopify Webhooks Using Node.js]]></title>

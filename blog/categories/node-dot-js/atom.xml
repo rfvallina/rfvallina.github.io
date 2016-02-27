@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node.js | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/node-dot-js/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2015-11-22T20:51:24+01:00</updated>
+  <updated>2016-02-27T17:45:35+01:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Monitor Disk Space Usage Using Node.js]]></title>
+    <link href="http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js/"/>
+    <updated>2016-02-27T17:21:09+01:00</updated>
+    <id>http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js</id>
+    <content type="html"><![CDATA[<p>Sometimes, if you are a server administrator or you simply are an application owner but you have full rights on the server, you could be interested in being informed when the disk space is reaching the maximum capacity.</p>
+
+<!-- more -->
+
+
+<p>In my case I had to deal with this while setting up different AWS environments. In AWS there&rsquo;s no built-in alarm to monitor disk usage. Depending on the case, AWS could provide scripts to create custom metrics. Such is the case with <strong>disk usage</strong> metrics. AWS provides a <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html">set of scripts</a> to report memory, swap, and disk space utilization metrics for a Linux instance.</p>
+
+<h3>Drawback</h3>
+
+<ul>
+<li>You have to install these scripts manually</li>
+<li>AWS charges you for having custom metrics</li>
+</ul>
+
+
+<h3>Solution</h3>
+
+<p>A cheaper solution is to develop your own tool to report disk usage. I created a simple Node script which sends an email notification in case the available disk percentage falls below a certain threshold.</p>
+
+<pre><code class="js">'use strict'
+
+var disk = require('diskusage'),
+    nodemailer = require('nodemailer'),
+    sendmailTransport = require('nodemailer-sendmail-transport');
+
+var THRESHOLD = 30;
+
+disk.check('/', function(err, info) {
+    var availablePercentage = ((info.available / info.total) * 100).toFixed(2);
+    if(availablePercentage &lt;= THRESHOLD){
+        //Setup email data
+        var transporter = nodemailer.createTransport(sendmailTransport({
+            path: '/usr/sbin/sendmail'
+        }));
+        var mailOptions = {
+            from: 'EC2 Admin &lt;admin-ec2@no-reply.com&gt;', // sender address
+            to: 'address1@domain.com, address2@domain.com', // list of receivers
+            subject: 'Disk Usage Warning!!!', // Subject line
+            text: 'Only ' + availablePercentage + '% of disk space is available' // plaintext body
+        };
+        //Send email
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                return console.log(error);
+            }
+            console.log('Message sent: ' + info.response);
+        });
+    }
+});
+</code></pre>
+
+<p>As you see, the script requires to use three third-party node modules. <strong>diskusage</strong> is responsible to check the disk space, while <strong>nodemailer</strong> and <strong>nodemailer-sendmail-transport</strong> are responsible for sending the email notification. It assumes that sendmail is installed in the system to ensure the message reaches its destination.</p>
+
+<p>Below is the <strong>package.json</strong> used to setup the script. You have to type <strong>npm install</strong> to have all the necessary modules installed.
+And type <strong>node app.js</strong> to run the script.</p>
+
+<pre><code class="json">{
+  "name"        : "disk-usage-alarm",
+  "version"     : "0.0.1",
+  "private"     : "true",
+  "description" : "",
+  "author"      : "rfvallina",
+  "homepage"    : "http://rfvallina.com",
+  "dependencies": {
+    "diskusage": "^0.1.4",
+    "nodemailer": "^2.0.0",
+    "nodemailer-sendmail-transport": "1.0.0"
+  }
+}
+</code></pre>
+
+<h3>Cron setup</h3>
+
+<p>If you want the script to run on a regular basis, let cron daemon do it. Below are the steps to add it to crontab.</p>
+
+<ul>
+<li>Edit crontab</li>
+</ul>
+
+
+<pre><code class="sh">crontab -e
+</code></pre>
+
+<ul>
+<li>Add entry to crontab. Place the below text in crontab.</li>
+</ul>
+
+
+<p>0 * * * * node /path/to/script/app.js</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Verify Shopify Webhooks Using Node.js]]></title>
