@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://rfvallina.com/blog/2016/04/10/how-to-schedule-a-reboot-on-an-ec2-instance-in-aws/</loc>
+    <lastmod>2016-04-10T19:54:44+02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js/</loc>
     <lastmod>2016-02-27T17:21:09+01:00</lastmod>
     <priority>0.8</priority>
@@ -47,25 +52,25 @@
   </url>
   <url>
     <loc>http://rfvallina.com/blog/archives/</loc>
-    <lastmod>2016-02-27T17:45:35+01:00</lastmod>
+    <lastmod>2016-04-10T21:32:16+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/</loc>
-    <lastmod>2016-02-27T17:45:35+01:00</lastmod>
+    <lastmod>2016-04-10T21:32:16+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/about/</loc>
-    <lastmod>2016-02-27T17:45:35+01:00</lastmod>
+    <lastmod>2016-04-10T21:32:16+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://rfvallina.com/portfolio/</loc>
-    <lastmod>2016-02-27T17:45:35+01:00</lastmod>
+    <lastmod>2016-04-10T21:32:16+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

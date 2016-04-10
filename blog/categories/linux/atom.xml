@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2016-02-27T17:45:35+01:00</updated>
+  <updated>2016-04-10T21:32:16+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -14,7 +14,51 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Monitor Disk Space Usage Using Node.js]]></title>
+    <title type="html"><![CDATA[How to Schedule a Daily Reboot on an AWS EC2 Instance]]></title>
+    <link href="http://rfvallina.com/blog/2016/04/10/how-to-schedule-a-reboot-on-an-ec2-instance-in-aws/"/>
+    <updated>2016-04-10T19:54:44+02:00</updated>
+    <id>http://rfvallina.com/blog/2016/04/10/how-to-schedule-a-reboot-on-an-ec2-instance-in-aws</id>
+    <content type="html"><![CDATA[<p>I don&rsquo;t think this is a usual thing in production environments, but I had the requirement to reboot the AWS EC2 instance every day because the applications were slowing down as the days go by.</p>
+
+<!-- more -->
+
+
+<p><img class="center" src="/images/blog/aws.png"></p>
+
+<p>The standard way AWS provides is by monitoring items like CPU utilization, memory used,&hellip; This monitorization is associated with <a href="https://aws.amazon.com/cloudwatch/?nc1=h_ls">CloudWatch</a>. The problem here is that you get charged if you exceed the free tier limits.</p>
+
+<p>There&rsquo;s an easy way to setup a daily reboot with <strong>Cron</strong> and doing a simple AWS tunning. Below I will show you how to do it. It&rsquo;s pretty straightforward. Note that you need to have the <a href="http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/set-up-ec2-cli-linux.html">aws-cli</a> installed.</p>
+
+<ul>
+<li>Go to <a href="https://console.aws.amazon.com/iam/home">IAM Console</a></li>
+<li>Create a new user. This user will perform the operations. In our case, the EC2 instance reboot.</li>
+<li>Attach a policy with the necessary privileges to the user. The easy way is to attach the Administrator policy, so the user will have rights to perform any operation on the instance. Another option is to create a new policy and assign actions like &ldquo;rebootInstance&rdquo;, &ldquo;startInstance&rdquo;, &ldquo;stopInstance&rdquo;.</li>
+<li>Open a terminal and login to your EC2 instance.</li>
+<li>Setup your AWS credentials and default region (optional)</li>
+</ul>
+
+
+<pre><code class="sh">aws configure
+</code></pre>
+
+<ul>
+<li>Tell AWS to reboot the specified instance.</li>
+</ul>
+
+
+<pre><code class="sh">aws ec2 reboot-instances --instance-ids &lt;instance-id&gt;
+</code></pre>
+
+<p>If you need to do this daily, it&rsquo;s better to tell cron to do this for you. Simply add the below entry to crontab and cron will run the command every day at 9am.</p>
+
+<p><strong>0 09 * * * aws ec2 reboot-instances &ndash;instance-ids <em>&lt;instance-id></em></strong></p>
+
+<p>And that&rsquo;s it!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Monitor Disk Space Usage in AWS Using Node.js]]></title>
     <link href="http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js/"/>
     <updated>2016-02-27T17:21:09+01:00</updated>
     <id>http://rfvallina.com/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js</id>
