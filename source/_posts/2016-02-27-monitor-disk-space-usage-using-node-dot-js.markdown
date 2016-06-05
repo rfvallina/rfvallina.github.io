@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Monitor disk space usage using Node.js"
+title: "Monitor disk space usage in AWS using Node.js"
 date: 2016-02-27 17:21:09 +0100
 comments: true
 categories: [Node.js, AWS, Linux]
