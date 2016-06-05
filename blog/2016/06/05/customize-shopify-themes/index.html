@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Raúl Fuente Vallina - Software developer</title>
+  <title>Tips to Customize Shopify Themes - Raúl Fuente Vallina - Software developer</title>
   <meta name="author" content="Raúl Fuente Vallina">
 
   
-  <meta name="description" content="Blog Archive 2016 Tips to Customize Shopify Themes
-Jun 05 2016 posted in ecommerce, shopify How to Schedule a Daily Reboot on an AWS EC2 Instance &hellip;">
+  <meta name="description" content="Whether you are changing the look of your theme or you are adding a new feature not supported by your current theme you have to make changes on your &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ Jun 05 2016 posted in ecommerce, shopify How to Schedule a Daily Reboot on an AW
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://rfvallina.com/blog/archives">
+  <link rel="canonical" href="http://rfvallina.com/blog/2016/06/05/customize-shopify-themes">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Raúl Fuente Vallina" type="application/atom+xml">
@@ -118,188 +117,142 @@ Jun 05 2016 posted in ecommerce, shopify How to Schedule a Daily Reboot on an AW
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      
+        <h1 class="entry-title">Tips to Customize Shopify Themes</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-06-05T10:37:21+02:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:37 am</span></time>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>Whether you are changing the look of your theme or you are adding a new feature not supported by your current theme you have to make changes on your theme files. Shopify gives some recommendations to achieve this in <a href="https://help.shopify.com/themes/customization">this post</a>.</p>
 
-  
-  <h2>2016</h2>
+<!-- more -->
 
-<article>
-  
-<h1><a href="/blog/2016/06/05/customize-shopify-themes/">Tips to Customize Shopify Themes</a></h1>
-<time datetime="2016-06-05T10:37:21+02:00" pubdate><span class='month'>Jun</span> <span class='day'>05</span> <span class='year'>2016</span></time>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ecommerce/'>ecommerce</a>, <a class='category' href='/blog/categories/shopify/'>shopify</a></span>
-</footer>
+<p><img class="center" src="/images/blog/shopify.png"></p>
 
+<h2>Before Start</h2>
 
-</article>
+<p>You have to make a copy of the theme you want to customize (usually the online one). You will keep making changes to the copy and previewing them till you are comfortable with the results.</p>
 
+<p><img class="center" src="/images/blog/shopify_duplicate.png"></p>
 
+<p>You have to be aware that changing the theme of the site can lead to problems on your site. Shopify has a support policy and <a href="https://help.shopify.com/themes/customization#getting-help">provides an explanation</a> about the <strong>supported</strong> and <strong>unsupported</strong> customizations. If you are about to do unsupported customizations you should ask a Shopify expert first.</p>
 
-<article>
-  
-<h1><a href="/blog/2016/04/10/how-to-schedule-a-reboot-on-an-ec2-instance-in-aws/">How to Schedule a Daily Reboot on an AWS EC2 Instance</a></h1>
-<time datetime="2016-04-10T19:54:44+02:00" pubdate><span class='month'>Apr</span> <span class='day'>10</span> <span class='year'>2016</span></time>
+<h2>How to Edit</h2>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/linux/'>linux</a></span>
-</footer>
+<p>Shopify does not provide FTP service to transfer theme files. They provide access to the store files through the admin portal and the database via the API though. But their systems are not accessible via ftp for security and data integrity.</p>
 
+<p>If you want to edit the theme through the Admin portal, you have several options:</p>
 
-</article>
+<ol>
+<li>Online editor</li>
+</ol>
 
 
+<p> <img class="center" src="/images/blog/shopify_customize_theme.png">
+2. Edit HTML/CSS/JS files directly</p>
 
-<article>
-  
-<h1><a href="/blog/2016/02/27/monitor-disk-space-usage-using-node-dot-js/">Monitor Disk Space Usage in AWS Using Node.js</a></h1>
-<time datetime="2016-02-27T17:21:09+01:00" pubdate><span class='month'>Feb</span> <span class='day'>27</span> <span class='year'>2016</span></time>
+<p> With this method you would copy and paste the changes directly into the theme files.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a></span>
-</footer>
+<p> <img class="center" src="/images/blog/shopify_edit_html_css.png">
+3. External tool to sync theme files</p>
 
+<p> Here you have a powerful tool to sync files in the way Dropbox does. <a href="https://github.com/Shopify/shopify_theme">https://github.com/Shopify/shopify_theme</a></p>
 
-</article>
+<h2>Publish</h2>
 
+<p>Once you are satisfied with the results you&rsquo;d want to publish the changes. You have to press <strong>Publish theme</strong> button.</p>
 
+<blockquote><p>Test the changes thoroughly before making them public. Although Shopify keeps history of the files and you could go back to an older version it&rsquo;s important you test your site in depth.</p></blockquote>
 
-  
-  <h2>2015</h2>
+<h2>Use Git</h2>
 
-<article>
-  
-<h1><a href="/blog/2015/11/22/verify-shopify-webhooks-using-node-dot-js/">Verify Shopify Webhooks Using Node.js</a></h1>
-<time datetime="2015-11-22T20:17:17+01:00" pubdate><span class='month'>Nov</span> <span class='day'>22</span> <span class='year'>2015</span></time>
+<p>One of my recommendations is to use a <em>scm</em> (Source Control Management) system like <strong>Git</strong>. Consider using <strong>Bitbucket</strong>. It&rsquo;s free.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ecommerce/'>ecommerce</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a>, <a class='category' href='/blog/categories/shopify/'>shopify</a></span>
-</footer>
+<p>Before start you would make a copy of your theme on your local machine and setup a remote git repository.
+As you make changes on the files you would be committing them to the remote repository. If, at some point in time you face any issue, at least you could review all changes made in the past and restore a specific version of a file.</p>
 
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/11/12/share-private-node-dot-js-modules-across-applications-locally/">Share Private Node.js Modules Across Applications (Locally)</a></h1>
-<time datetime="2015-11-12T14:53:11+01:00" pubdate><span class='month'>Nov</span> <span class='day'>12</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node-dot-js/'>node.js</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/08/22/preview-tiff-and-pdf-files-using-html5-file-api/">Preview TIFF and PDF Files Using HTML5 File API</a></h1>
-<time datetime="2015-08-22T20:29:32+02:00" pubdate><span class='month'>Aug</span> <span class='day'>22</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/canvas/'>canvas</a>, <a class='category' href='/blog/categories/filereader/'>filereader</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/images/'>images</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/06/19/logging-as-a-service/">Logging as a Service</a></h1>
-<time datetime="2015-06-19T12:23:49+02:00" pubdate><span class='month'>Jun</span> <span class='day'>19</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cloud/'>cloud</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/logging/'>logging</a>, <a class='category' href='/blog/categories/saas/'>saas</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/05/14/validate-yahoo-signature-with-php/">Validate Yahoo Signature With PHP</a></h1>
-<time datetime="2015-05-14T12:53:20+02:00" pubdate><span class='month'>May</span> <span class='day'>14</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/php/'>php</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/yahoo/'>yahoo</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/02/01/deployment-management-on-multiple-aws-instances-with-capistrano-3/">Deployment Management on Multiple AWS Instances With Capistrano 3</a></h1>
-<time datetime="2015-02-01T16:02:16+01:00" pubdate><span class='month'>Feb</span> <span class='day'>01</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/capistrano/'>capistrano</a>, <a class='category' href='/blog/categories/centos/'>centos</a>, <a class='category' href='/blog/categories/deployment-management/'>deployment management</a>, <a class='category' href='/blog/categories/ec2/'>ec2</a>, <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/jenkins/'>jenkins</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/opsworks/'>opsworks</a>, <a class='category' href='/blog/categories/php/'>php</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/01/04/how-to-install-apache/">How to Install Apache, PHP 5.5 and Memcached on AWS EC2</a></h1>
-<time datetime="2015-01-04T00:00:00+01:00" pubdate><span class='month'>Jan</span> <span class='day'>04</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/ec2/'>ec2</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/memcached/'>memcached</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/blog/2014/12/25/welcome/">Welcome</a></h1>
-<time datetime="2014-12-25T20:58:39+01:00" pubdate><span class='month'>Dec</span> <span class='day'>25</span> <span class='year'>2014</span></time>
-
-
-</article>
-
+<p>There are interesting tools which allow you to make the whole process automatic, including deployments into Shopify. <a href="https://www.shopify.com/partners/blog/19752835-using-git-to-simplify-shopify-theme-deployment">Read this post for more information</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+  <span class="byline author vcard">Authored by <span class="fn">
   
+    Raúl Fuente Vallina
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-06-05T10:37:21+02:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:37 am</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ecommerce/'>ecommerce</a>, <a class='category' href='/blog/categories/shopify/'>shopify</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://rfvallina.com/blog/2016/06/05/customize-shopify-themes/" data-via="rfvallina" data-counturl="http://rfvallina.com/blog/2016/06/05/customize-shopify-themes/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-layout="button_count" data-send="false" data-width="300" data-show-faces="false"></div>
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/04/10/how-to-schedule-a-reboot-on-an-ec2-instance-in-aws/" title="Previous Post: How to Schedule a Daily Reboot on an AWS EC2 Instance">&laquo; How to Schedule a Daily Reboot on an AWS EC2 Instance</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -314,7 +267,10 @@ Jun 05 2016 posted in ecommerce, shopify How to Schedule a Daily Reboot on an AW
       var disqus_shortname = 'rfvallinacom';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rfvallina.com/blog/2016/06/05/customize-shopify-themes/';
+        var disqus_url = 'http://rfvallina.com/blog/2016/06/05/customize-shopify-themes/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

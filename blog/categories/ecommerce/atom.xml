@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ecommerce | Raúl Fuente Vallina]]></title>
   <link href="http://rfvallina.com/blog/categories/ecommerce/atom.xml" rel="self"/>
   <link href="http://rfvallina.com/"/>
-  <updated>2016-04-10T21:32:16+02:00</updated>
+  <updated>2016-06-05T15:50:35+02:00</updated>
   <id>http://rfvallina.com/</id>
   <author>
     <name><![CDATA[Raúl Fuente Vallina]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Tips to Customize Shopify Themes]]></title>
+    <link href="http://rfvallina.com/blog/2016/06/05/customize-shopify-themes/"/>
+    <updated>2016-06-05T10:37:21+02:00</updated>
+    <id>http://rfvallina.com/blog/2016/06/05/customize-shopify-themes</id>
+    <content type="html"><![CDATA[<p>Whether you are changing the look of your theme or you are adding a new feature not supported by your current theme you have to make changes on your theme files. Shopify gives some recommendations to achieve this in <a href="https://help.shopify.com/themes/customization">this post</a>.</p>
+
+<!-- more -->
+
+
+<p><img class="center" src="/images/blog/shopify.png"></p>
+
+<h2>Before Start</h2>
+
+<p>You have to make a copy of the theme you want to customize (usually the online one). You will keep making changes to the copy and previewing them till you are comfortable with the results.</p>
+
+<p><img class="center" src="/images/blog/shopify_duplicate.png"></p>
+
+<p>You have to be aware that changing the theme of the site can lead to problems on your site. Shopify has a support policy and <a href="https://help.shopify.com/themes/customization#getting-help">provides an explanation</a> about the <strong>supported</strong> and <strong>unsupported</strong> customizations. If you are about to do unsupported customizations you should ask a Shopify expert first.</p>
+
+<h2>How to Edit</h2>
+
+<p>Shopify does not provide FTP service to transfer theme files. They provide access to the store files through the admin portal and the database via the API though. But their systems are not accessible via ftp for security and data integrity.</p>
+
+<p>If you want to edit the theme through the Admin portal, you have several options:</p>
+
+<ol>
+<li>Online editor</li>
+</ol>
+
+
+<p> <img class="center" src="/images/blog/shopify_customize_theme.png">
+2. Edit HTML/CSS/JS files directly</p>
+
+<p> With this method you would copy and paste the changes directly into the theme files.</p>
+
+<p> <img class="center" src="/images/blog/shopify_edit_html_css.png">
+3. External tool to sync theme files</p>
+
+<p> Here you have a powerful tool to sync files in the way Dropbox does. <a href="https://github.com/Shopify/shopify_theme">https://github.com/Shopify/shopify_theme</a></p>
+
+<h2>Publish</h2>
+
+<p>Once you are satisfied with the results you&rsquo;d want to publish the changes. You have to press <strong>Publish theme</strong> button.</p>
+
+<blockquote><p>Test the changes thoroughly before making them public. Although Shopify keeps history of the files and you could go back to an older version it&rsquo;s important you test your site in depth.</p></blockquote>
+
+<h2>Use Git</h2>
+
+<p>One of my recommendations is to use a <em>scm</em> (Source Control Management) system like <strong>Git</strong>. Consider using <strong>Bitbucket</strong>. It&rsquo;s free.</p>
+
+<p>Before start you would make a copy of your theme on your local machine and setup a remote git repository.
+As you make changes on the files you would be committing them to the remote repository. If, at some point in time you face any issue, at least you could review all changes made in the past and restore a specific version of a file.</p>
+
+<p>There are interesting tools which allow you to make the whole process automatic, including deployments into Shopify. <a href="https://www.shopify.com/partners/blog/19752835-using-git-to-simplify-shopify-theme-deployment">Read this post for more information</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Verify Shopify Webhooks Using Node.js]]></title>
